@@ -7,8 +7,57 @@ class Snake():
         self.tamano = tamano
 
         ### Completar
+        pygame.init()
+        self.width, self.height = 800, 600
+        firstColor = (42, 144, 30)
+        secondColor = (66, 226, 48)
+        thirdColor = (255, 255, 255, 0.9)
+
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_caption("Snake Game")
+        
+                # Variable para mantener el juego en ejecución
+        running = True
+
+
+        # Bucle principal del juego
+        while running:
+            # Rellena la pantalla con un color
+            self.screen.fill(secondColor)
+            self.createGrid(self.width, self.height)
+
+            # Iterar sobre la lista de eventos
+            for event in pygame.event.get():
+                # Si se cierra la ventana, salir del bucle
+                if event.type == pygame.QUIT:
+                    running = False
+                
+
+            # Aquí dibujamos en la pantalla
+            # pygame.draw.rect(screen, rojo, (100, 100, 50, 50))  # Ejemplo: dibujar un rectángulo
+
+            # Actualizar la pantalla
+            pygame.display.flip()
+
+        # Salir de Pygame
+        pygame.quit()
+
+
 
         self.reset()
+    
+    def createGrid(self, width, height):
+        height -= 100
+        offset_x = (self.width - height) // 2
+        offset_y = (self.height - height) // 2
+        tile_size = int(height / (self.tamano - 1))
+        for x in range(0, height, tile_size):
+            for y in range(0, height, tile_size):
+                rect = pygame.Rect(x + offset_x, y + offset_y, tile_size, tile_size)
+                pygame.draw.rect(self.screen, (255, 255, 255), rect, 1)
+                color = (42, 144, 30, 230) if (x // tile_size + y // tile_size) % 2 == 0 else (255, 255, 255, 230)
+                pygame.draw.rect(self.screen, color, rect.inflate(-1, -1))
+                
 
     # Reinicia el juego:
     #   - Pone la longitud de la serpiente en 1.
@@ -40,4 +89,3 @@ class Snake():
     def render(self):
         ### Completar
         pass
-
