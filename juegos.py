@@ -2,6 +2,7 @@
 
 import pygame
 from grilla import Grilla
+import sys
 
 class Snake():
 	def __init__(self, tamano):
@@ -25,6 +26,7 @@ class Snake():
 		# Bucle principal del juego
 		while running:
 			# Rellena la pantalla con un color
+			self.button("Exit")
 			self.screen.fill(secondColor)
 			self.grilla.createGrid()
 
@@ -44,6 +46,43 @@ class Snake():
 
 
 		self.reset()
+  
+	def button (self, text):
+		textColor = (245, 245, 245)
+		bgBtnColor = (40, 42, 50)
+		hoverBtnColor = (58, 61, 70)
+		width = self.screen.get_width()
+		height = self.screen.get_height()
+		textSize = 28
+		font = pygame.font.SysFont('segoeuisemibold', textSize)
+		text = font.render(text, True, textColor)
+		text_rect = text.get_rect(center=(width/2 + 70, height/2 + 20))
+		pygame.draw.rect(self.screen, bgBtnColor, [width/2, height/2, 140, 40], border_radius=40)
+		self.screen.blit(text, text_rect)
+
+		while True:
+			for ev in pygame.event.get(): 
+		  
+				if ev.type == pygame.QUIT: 
+					pygame.quit() 
+
+				#checks if a mouse is clicked 
+				if ev.type == pygame.MOUSEBUTTONDOWN: 
+				
+					#if the mouse is clicked on the 
+					# button the game is terminated 
+					if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
+						pygame.quit() 
+				pass	
+			# self.screen.fill((bgColor))
+			mouse = pygame.mouse.get_pos()
+			if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
+				pygame.draw.rect(self.screen,hoverBtnColor,[width/2,height/2,140,40]) 
+			else:
+				pygame.draw.rect(self.screen,bgBtnColor,[width/2,height/2,140,40]) 
+			self.screen.blit(text , (width/2+50,height/2)) 
+			pygame.display.update() 
+
 
 	def draw_snake(self):
 		pass
