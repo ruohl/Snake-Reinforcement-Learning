@@ -8,7 +8,6 @@ class Grilla:
 		self.screen = screen
 		
 		self.grid = [[0 for y in range(tamanoCelda)] for x in range(tamanoCelda)]
-		print(self.grid)
 		self.tile_size = int(height / (self.tamanoCelda))
   
 		self.createGrid()
@@ -23,7 +22,6 @@ class Grilla:
 		for x in range(0, self.height, tile_size):
 			for y in range(0, self.height, tile_size):
 				rect = pygame.Rect(x + offset_x, y + offset_y, tile_size, tile_size)
-				print(f"X: {x} Y:{y}")
 				pygame.draw.rect(self.screen, (255, 255, 255), rect, 1)
 				color = firstColor if (x // tile_size + y // tile_size) % 2 == 0 else thirdColor
 				pygame.draw.rect(self.screen, color, rect.inflate(-1, -1))
