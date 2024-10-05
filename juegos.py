@@ -1,6 +1,7 @@
 # En este archivo tenemos la clase que representa el juego a programar, es importante que siga la interfaz que tiene esta clase, o sea que tenga las funciones que hay en este archivo.
 
-import pygame 
+import pygame
+from grilla import Grilla
 
 class Snake():
 	def __init__(self, tamano):
@@ -15,6 +16,7 @@ class Snake():
 
 		self.screen = pygame.display.set_mode((self.width, self.height))
 		pygame.display.set_caption("Snake Game")
+		self.grilla = Grilla(self.width, self.height, self.screen, self.tamano)
 		
 		# Variable para mantener el juego en ejecución
 		running = True
@@ -24,18 +26,15 @@ class Snake():
 		while running:
 			# Rellena la pantalla con un color
 			self.screen.fill(secondColor)
-			self.createGrid(self.width, self.height)
+			self.grilla.createGrid()
+
+			self.draw_snake()
 
 			# Iterar sobre la lista de eventos
 			for event in pygame.event.get():
 				# Si se cierra la ventana, salir del bucle
 				if event.type == pygame.QUIT:
 					running = False
-				
-
-			# Aquí dibujamos en la pantalla
-			# pygame.draw.rect(screen, rojo, (100, 100, 50, 50))  # Ejemplo: dibujar un rectángulo
-
 			# Actualizar la pantalla
 			pygame.display.flip()
 
@@ -45,18 +44,9 @@ class Snake():
 
 
 		self.reset()
-	
-	def createGrid(self, width, height):
-		height -= 100
-		offset_x = (self.width - height) // 2
-		offset_y = (self.height - height) // 2
-		tile_size = int(height / (self.tamano - 1))
-		for x in range(0, height, tile_size):
-			for y in range(0, height, tile_size):
-				rect = pygame.Rect(x + offset_x, y + offset_y, tile_size, tile_size)
-				pygame.draw.rect(self.screen, (255, 255, 255), rect, 1)
-				color = (42, 144, 30, 230) if (x // tile_size + y // tile_size) % 2 == 0 else (255, 255, 255, 230)
-				pygame.draw.rect(self.screen, color, rect.inflate(-1, -1))
+
+	def draw_snake(self):
+		pass
 
 	# Reinicia el juego:
 	#   - Pone la longitud de la serpiente en 1.
