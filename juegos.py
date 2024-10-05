@@ -26,7 +26,7 @@ class Snake():
 		# Bucle principal del juego
 		while running:
 			# Rellena la pantalla con un color
-			# self.button("Exit")
+			self.button("Exit", pygame.quit)
 			self.screen.fill(secondColor)
 			self.grilla.createGrid()
 
@@ -47,7 +47,7 @@ class Snake():
 
 		self.reset()
   
-	def button (self, text):
+	def button (self, text, event):
 		textColor = (245, 245, 245)
 		bgBtnColor = (40, 42, 50)
 		hoverBtnColor = (58, 61, 70)
@@ -64,7 +64,7 @@ class Snake():
 			for ev in pygame.event.get(): 
 		  
 				if ev.type == pygame.QUIT: 
-					pygame.quit() 
+					event()
 
 				#checks if a mouse is clicked 
 				if ev.type == pygame.MOUSEBUTTONDOWN: 
