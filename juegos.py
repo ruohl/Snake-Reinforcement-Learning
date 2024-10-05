@@ -26,7 +26,7 @@ class Snake():
 		# Bucle principal del juego
 		while running:
 			# Rellena la pantalla con un color
-			self.button("Exit")
+			# self.button("Exit")
 			self.screen.fill(secondColor)
 			self.grilla.createGrid()
 
@@ -69,7 +69,7 @@ class Snake():
 				#checks if a mouse is clicked 
 				if ev.type == pygame.MOUSEBUTTONDOWN: 
 				
-					#if the mouse is clicked on the 
+					#if the mouse is clicked on the j
 					# button the game is terminated 
 					if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
 						pygame.quit() 
