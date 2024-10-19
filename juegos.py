@@ -2,98 +2,55 @@
 
 import pygame
 from grilla import Grilla
+import random
+import time
 import sys
 
 class Snake():
-	def __init__(self, tamano):
-		self.tamano = tamano
+	def __init__(self, tamanoCelda):
+		self.corriendo = True
+		self.sigueVivo = True
+		self.tamanoCelda = tamanoCelda
+		self.direction = (0, 1) # (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
+		self.snake_length = 1
+		self.hayManzana = False
 
 		### Completar
 		pygame.init()
 		self.width, self.height = 800, 600
-		firstColor = (42, 144, 30)
-		secondColor = (66, 226, 48)
-		thirdColor = (255, 255, 255, 0.9)
 
 		self.screen = pygame.display.set_mode((self.width, self.height))
 		pygame.display.set_caption("Snake Game")
-		self.grilla = Grilla(self.width, self.height, self.screen, self.tamano)
+		self.grilla = Grilla(self.width, self.height, self.screen, self.tamanoCelda)
 		
-		# Variable para mantener el juego en ejecución
-		running = True
-
-
-		# Bucle principal del juego
-		while running:
-			# Rellena la pantalla con un color
-			self.button("Exit", pygame.quit)
-			self.screen.fill(secondColor)
-			self.grilla.createGrid()
-
-			self.draw_snake()
-
-			# Iterar sobre la lista de eventos
-			for event in pygame.event.get():
-				# Si se cierra la ventana, salir del bucle
-				if event.type == pygame.QUIT:
-					running = False
-			# Actualizar la pantalla
-			pygame.display.flip()
-
-		# Salir de Pygame
-		pygame.quit()
-
-
-
 		self.reset()
-  
-	def button (self, text, event):
-		textColor = (245, 245, 245)
-		bgBtnColor = (40, 42, 50)
-		hoverBtnColor = (58, 61, 70)
-		width = self.screen.get_width()
-		height = self.screen.get_height()
-		textSize = 28
-		font = pygame.font.SysFont('segoeuisemibold', textSize)
-		text = font.render(text, True, textColor)
-		text_rect = text.get_rect(center=(width/2 + 70, height/2 + 20))
-		pygame.draw.rect(self.screen, bgBtnColor, [width/2, height/2, 140, 40], border_radius=40)
-		self.screen.blit(text, text_rect)
+		self.render()
 
-		while True:
-			for ev in pygame.event.get(): 
-		  
-				if ev.type == pygame.QUIT: 
-					event()
+	def initSnake(self):
+		self.direccion = random.randint(0, 2) # (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
+		self.snake_length = 1
+		randomX, randomY = random.randint(self.tamanoCelda - (self.tamanoCelda - 1), self.tamanoCelda - 1), random.randint(self.tamanoCelda - (self.tamanoCelda - 1), self.tamanoCelda - 1)
+		self.grilla.grid[randomX][randomY] = 1
+		self.snake_head = (randomX, randomY)
+		self.snake = [(randomX, randomY)]
+		self.grilla.grid = [[0 for y in range(self.tamanoCelda)] for x in range(self.tamanoCelda)]
 
-				#checks if a mouse is clicked 
-				if ev.type == pygame.MOUSEBUTTONDOWN: 
-				
-					#if the mouse is clicked on the j
-					# button the game is terminated 
-					if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
-						pygame.quit() 
-				pass	
-			# self.screen.fill((bgColor))
-			mouse = pygame.mouse.get_pos()
-			if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
-				pygame.draw.rect(self.screen,hoverBtnColor,[width/2,height/2,140,40]) 
-			else:
-				pygame.draw.rect(self.screen,bgBtnColor,[width/2,height/2,140,40]) 
-			self.screen.blit(text , (width/2+50,height/2)) 
-			pygame.display.update() 
-
-
-	def draw_snake(self):
-		pass
+	def generarApple(self):
+		empty_cells = [(row, col) for row in range(len(self.grilla.grid)) for col in range(len(self.grilla.grid[row])) if self.grilla.grid[row][col] == 0]
+		if empty_cells:
+			apple_position = random.choice(empty_cells)
+			self.grilla.grid[apple_position[0]][apple_position[1]] = 2
+		self.hayManzana = True
 
 	# Reinicia el juego:
 	#   - Pone la longitud de la serpiente en 1.
 	#   - Coloca la serpiente en un lugar random.
 	#   - Pone la fruta en una posicion random
 	def reset(self):
-		### Completar
-		pass
+		self.game_over = False  # Reiniciar estado del juego
+		self.sigueVivo = True
+		self.hayManzana = False
+		self.initSnake()
 
 	# Mueve al jugador una vez, en fuincion a la accion realizada.
 	# Devuelve 3 cosas:
@@ -103,17 +60,53 @@ class Snake():
 	# Recordatorio: un estado es una lista de 11 numeros bienarios (1 o 0), cada uno de estos bits indican si se cumple una condicion o no (estas 11 condiciones estan detalladas en el informe).
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
+		time.sleep(0.1)
+		if (self.hayManzana == False):
+			self.generarApple()
+		estado_nuevo = None
+		recompenza = None
+		termino = None
 
-		estado_nuevo = None ### Completar
-		recompenza = None   ### Completar
-		termino = None      ### Completar
-		### Completar
-		
+		if accion == 1:  # Turn left
+			self.direction = (-self.direction[1], self.direction[0])
+		elif accion == 2:  # Turn right
+			self.direction = (self.direction[1], -self.direction[0])
+
+		# Calculate new head position
+		new_head = (self.snake[0][0] + self.direction[0], self.snake[0][1] + self.direction[1])
+
+		# Check for collision with walls or itself
+		if ((new_head[0] < 0) or (new_head[0] >= len(self.grilla.grid)) or (new_head[1] < 0) or (new_head[1] >= len(self.grilla.grid[0])) or (self.grilla.grid[new_head[0]][new_head[1]] == 1)):
+			return False
+
+		# Check for apple
+		if self.grilla.grid[new_head[0]][new_head[1]] == 2:
+			recompenza = 1
+			self.hayManzana = False
+			self.snake.insert(0, new_head)  # Grow snake
+		else:
+			recompenza = 0
+			self.snake.insert(0, new_head)
+			tail = self.snake.pop()
+			self.grilla.grid[tail[0]][tail[1]] = 0  # Remove tail from grid
+
+		# Update grid with new head position
+		self.grilla.grid[new_head[0]][new_head[1]] = 1
+
 		self.render()
 		return estado_nuevo, recompenza, termino
-	
-	
+
+
 	# Actualiza la informacion que se muestra en pantalla usando pygame.
 	def render(self):
-		### Completar
-		pass
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+
+		firstColor = (42, 144, 30)
+		secondColor = (66, 226, 48)
+		thirdColor = (255, 255, 255, 0.9)
+
+		self.screen.fill(secondColor)
+		self.grilla.renderGrid()
+		pygame.display.flip()

@@ -18,7 +18,7 @@ if __name__ == "__main__":
         print("Error, parametros pasados de manera incorrecta")
         print_help()
     
-    juego = Snake(16)
+    juego = Snake(30)
     if tipo_jugador in JUGADORES_PERMITIDOS:
         jugador = JUGADORES_PERMITIDOS[tipo_jugador](juego)
     else:
