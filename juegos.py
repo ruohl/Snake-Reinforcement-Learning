@@ -13,7 +13,8 @@ class Snake():
 		self.tamanoCelda = tamanoCelda
 		self.direction = (0, 1) # (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
 		self.snake_length = 1
-		self.hayManzana = False
+		self.manzanas = 0
+		self.maximoManzanas = 10
 
 		### Completar
 		pygame.init()
@@ -38,9 +39,10 @@ class Snake():
 	def generarApple(self):
 		empty_cells = [(row, col) for row in range(len(self.grilla.grid)) for col in range(len(self.grilla.grid[row])) if self.grilla.grid[row][col] == 0]
 		if empty_cells:
-			apple_position = random.choice(empty_cells)
-			self.grilla.grid[apple_position[0]][apple_position[1]] = 2
-		self.hayManzana = True
+			while self.manzanas < self.maximoManzanas:
+				apple_position = random.choice(empty_cells)
+				self.grilla.grid[apple_position[0]][apple_position[1]] = 2
+				self.manzanas += 1
 
 	# Reinicia el juego:
 	#   - Pone la longitud de la serpiente en 1.
@@ -50,6 +52,7 @@ class Snake():
 		self.game_over = False  # Reiniciar estado del juego
 		self.sigueVivo = True
 		self.hayManzana = False
+		self.manzanas = 0
 		self.initSnake()
 
 	# Mueve al jugador una vez, en fuincion a la accion realizada.
@@ -61,8 +64,7 @@ class Snake():
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
 		time.sleep(0.1)
-		if (self.hayManzana == False):
-			self.generarApple()
+		self.generarApple()
 		estado_nuevo = None
 		recompenza = None
 		termino = None
@@ -82,7 +84,7 @@ class Snake():
 		# Check for apple
 		if self.grilla.grid[new_head[0]][new_head[1]] == 2:
 			recompenza = 1
-			self.hayManzana = False
+			self.manzanas -= 1
 			self.snake.insert(0, new_head)  # Grow snake
 		else:
 			recompenza = 0
@@ -103,9 +105,7 @@ class Snake():
 			if event.type == pygame.QUIT:
 				pygame.quit()
 
-		firstColor = (42, 144, 30)
-		secondColor = (66, 226, 48)
-		thirdColor = (255, 255, 255, 0.9)
+		secondColor = (89, 71, 46)
 
 		self.screen.fill(secondColor)
 		self.grilla.renderGrid()

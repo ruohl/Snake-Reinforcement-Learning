@@ -13,8 +13,8 @@ class Grilla:
 		self.renderGrid()
 
 	def renderGrid(self):
-		firstColor = (42, 144, 30, 230)
-		thirdColor = (255, 255, 255, 230)
+		firstColor = (225, 153, 65)
+		thirdColor = (254, 183, 86)
 		tamanoFinal = int(self.height * 0.8)
 		tile_size = int(tamanoFinal / self.tamanoCelda)
 
@@ -30,7 +30,6 @@ class Grilla:
 		for x in range(0, grid_width, tile_size):
 			for y in range(0, grid_height, tile_size):
 				rect = pygame.Rect(x + offset_x, y + offset_y, tile_size, tile_size)
-				pygame.draw.rect(self.screen, (255, 255, 255), rect)
 				color = firstColor if (x // tile_size + y // tile_size) % 2 == 0 else thirdColor
 				pygame.draw.rect(self.screen, color, rect.inflate(0,0))
 

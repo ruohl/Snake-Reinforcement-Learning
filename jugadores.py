@@ -9,7 +9,7 @@ class Random():
 
 	# Juega al juego(de manera aleatoria) hasta que este termine
 	def jugar(self):
-		for x in range(0, 5): # Esto es de prueba
+		while True: # Esto es de prueba
 			jugando = True
 			while jugando:
 				jugando = self.juego.step(random.randint(0, 2))
