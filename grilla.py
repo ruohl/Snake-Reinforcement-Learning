@@ -13,8 +13,8 @@ class Grilla:
 		self.renderGrid()
 
 	def renderGrid(self):
-		firstColor = (225, 153, 65)
-		thirdColor = (254, 183, 86)
+		firstColor = (173, 215, 246)
+		thirdColor = (101, 191, 255)
 		tamanoFinal = int(self.height * 0.8)
 		tile_size = int(tamanoFinal / self.tamanoCelda)
 

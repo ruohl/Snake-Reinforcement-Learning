@@ -105,7 +105,7 @@ class Snake():
 			if event.type == pygame.QUIT:
 				pygame.quit()
 
-		secondColor = (89, 71, 46)
+		secondColor = (3, 53, 74)
 
 		self.screen.fill(secondColor)
 		self.grilla.renderGrid()
