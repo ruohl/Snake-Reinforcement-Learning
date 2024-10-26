@@ -15,6 +15,7 @@ class Snake():
 		self.snake_length = 1
 		self.manzanas = 0
 		self.maximoManzanas = maxManzanas
+		self.applePosition = None
 
 		### Completar
 		pygame.init()
@@ -131,8 +132,13 @@ class Snake():
 		dirSur = 1 if self.direction == (0,1) else 0
 		dirOeste = 1 if self.direction == (-1,0) else 0
 		dirEste = 1 if self.direction == (1,0) else 0
-		manzanaIzquierda = 1 if self.applePosition[0] < self.snake_head[0] else 0
-		manzanaDerecha = 1 if self.applePosition[0] > self.snake_head[0] else 0
-		manzanaArriba = 1 if self.applePosition[1] < self.snake_head[1] else 0
-		manzanaAbajo = 1 if self.applePosition[1] > self.snake_head[1] else 0
+		manzanaIzquierda = 0
+		manzanaDerecha = 0
+		manzanaArriba = 0
+		manzanaAbajo = 0
+		if self.applePosition:
+			manzanaIzquierda = 1 if self.applePosition[0] < self.snake_head[0] else 0
+			manzanaDerecha = 1 if self.applePosition[0] > self.snake_head[0] else 0
+			manzanaArriba = 1 if self.applePosition[1] < self.snake_head[1] else 0
+			manzanaAbajo = 1 if self.applePosition[1] > self.snake_head[1] else 0
 		return (izqMuere, derMuere, adeMuere, dirNorte, dirSur, dirOeste, dirEste, manzanaIzquierda, manzanaDerecha, manzanaArriba, manzanaAbajo)
