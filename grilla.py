@@ -18,25 +18,27 @@ class Grilla:
 		tamanoFinal = int(self.height * 0.8)
 		tile_size = int(tamanoFinal / self.tamanoCelda)
 
-		# Calcula el tamaño total de la grilla
 		grid_width = self.tamanoCelda * tile_size
 		grid_height = self.tamanoCelda * tile_size
 
-		# Calcula el desplazamiento necesario para centrar la grilla
 		offset_x = (self.width - grid_width) // 2
 		offset_y = (self.height - grid_height) // 2
 
-		# Dibuja la grilla centrada
 		for x in range(0, grid_width, tile_size):
 			for y in range(0, grid_height, tile_size):
 				rect = pygame.Rect(x + offset_x, y + offset_y, tile_size, tile_size)
 				color = firstColor if (x // tile_size + y // tile_size) % 2 == 0 else thirdColor
-				pygame.draw.rect(self.screen, color, rect.inflate(0,0))
-
+				pygame.draw.rect(self.screen, color, rect.inflate(0, 0))
+				
 				indX, indY = x // tile_size, y // tile_size
-				if (self.grid[indX][indY] != 0):
-					color = (0, 0, 255) if self.grid[indX][indY] == 1 else (255, 0, 0)
-					pygame.draw.rect(self.screen, color, rect.inflate(0,0))
+				if self.grid[indX][indY] != 0:
+					if self.grid[indX][indY] == 1:
+						color = (0, 0, 255)  # Serpiente
+						pygame.draw.rect(self.screen, color, rect.inflate(0, 0))
+					elif self.grid[indX][indY] == 2:
+				        # Dibuja un círculo rojo para la manzana
+						pygame.draw.circle(self.screen, (255, 0, 0), rect.center, tile_size // 2)
+
 					
 	
 	def obtenerPosicion(self, gridX, gridY):
