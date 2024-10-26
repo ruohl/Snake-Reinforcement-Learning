@@ -6,19 +6,21 @@ JUGADORES_PERMITIDOS = {"ia": IA, "random": Random}
 
 def print_help():
     print("Como correr el script: \n")
-    print("\t python main.py random si ./train.json")
+    print("\t python main.py random si ./train.json 15 1")
 
 if __name__ == "__main__":
     try:
         tipo_jugador = sys.argv[1].lower()
         entrenar     = sys.argv[2].lower()
         file_path    = sys.argv[3]
+        tamano_grilla = int(sys.argv[4])
+        maxManzanas = int(sys.argv[5])
     
     except Exception:
         print("Error, parametros pasados de manera incorrecta")
         print_help()
     
-    juego = Snake(10)
+    juego = Snake(tamano_grilla, maxManzanas)
     if tipo_jugador in JUGADORES_PERMITIDOS:
         jugador = JUGADORES_PERMITIDOS[tipo_jugador](juego)
     else:

@@ -7,14 +7,14 @@ import time
 import sys
 
 class Snake():
-	def __init__(self, tamanoCelda):
+	def __init__(self, tamanoCelda, maxManzanas):
 		self.corriendo = True
 		self.sigueVivo = True
 		self.tamanoCelda = tamanoCelda
 		self.direction = (0, 1) # (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
 		self.snake_length = 1
 		self.manzanas = 0
-		self.maximoManzanas = 10
+		self.maximoManzanas = maxManzanas
 
 		### Completar
 		pygame.init()
