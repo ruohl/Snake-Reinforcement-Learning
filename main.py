@@ -6,16 +6,16 @@ JUGADORES_PERMITIDOS = {"ia": IA, "random": Random}
 
 def print_help():
     print("Como correr el script: \n")
-    print("\t python main.py random si ./train.json 15 1")
+    print("\t python main.py ia si ./train.pkl 15 1")
 
 if __name__ == "__main__":
     try:
         tipo_jugador = sys.argv[1].lower()
-        entrenar     = sys.argv[2].lower()
-        file_path    = sys.argv[3]
+        entrenar = sys.argv[2].lower()
+        file_path = sys.argv[3]
         tamano_grilla = int(sys.argv[4])
         maxManzanas = int(sys.argv[5])
-    
+
     except Exception:
         print("Error, parametros pasados de manera incorrecta")
         print_help()
@@ -26,8 +26,6 @@ if __name__ == "__main__":
     else:
         raise Exception("Nombre de jugador no conocido")
     
-
-
     # Entrenar puede ser 'si' o 'no', en caso de que sea 'si' se entrena el agente (siempre y cuando sea IA),
     # en caso de que sea 'no', se ve al agente jugar el juego seleccionado.
     if tipo_jugador == "ia":
@@ -37,9 +35,6 @@ if __name__ == "__main__":
             jugador.save()
         else:
             jugador.load()
-        
-    jugador.jugar()
-
     
-
+    jugador.jugar()
     

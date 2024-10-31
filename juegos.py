@@ -68,16 +68,14 @@ class Snake():
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
 		print("--------------------------------------------------\n")
-		time.sleep(0.3)
+		time.sleep(1)
 		self.generarApple()
-		estado_nuevo = None
 		recompensa = None
-		termino = None
 		if accion == 1:  # Turn left
 			self.direction = (-self.direction[1], self.direction[0])
 		elif accion == 2:  # Turn right
 			self.direction = (self.direction[1], -self.direction[0])
-		print(self.direction)
+		print(self.direction)	
 		# Calculate new head position
 		new_head = (self.snake[0][0] + self.direction[0], self.snake[0][1] + self.direction[1])
 		self.snake_head = new_head

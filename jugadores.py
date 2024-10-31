@@ -1,84 +1,93 @@
 # En este archivo tenemos las clases que representan jugadores
+import os
 import pickle
 import random
 
 class Random():
-	def __init__(self, juego):
-		self.juego = juego
-		### Completar si hace falta
+    def __init__(self, juego):
+        self.juego = juego
 
-	# Juega al juego(de manera aleatoria) hasta que este termine
-	def jugar(self):
-		while True: # Esto es de prueba
-			jugando = True
-			tupla = (0, 1, 2)
-			while jugando:
-				tupla, jugando, recompenza = self.juego.step(random.randint(0, 2))
-				print(str(tupla) + ": " + str(recompenza))
-			self.juego.reset()
-	
+    def jugar(self):
+        while True:  
+            estado = self.juego.reset()
+            jugando = True
+            while jugando:
+                accion = random.randint(0, 2)
+                estado, jugando, recompensa = self.juego.step(accion)
+                print(f"Estado: {estado}, Recompensa: {recompensa}")
 
-	def entrenar(self):
-		raise NotImplementedError
+
+    def entrenar(self):
+        raise NotImplementedError
 
 
 class IA():
-	def __init__(self, juego):
-		self.juego = juego
-		self.path = None
-		self.Q = {}
+    def __init__(self, juego):
+        self.juego = juego
+        self.path = os.path.join(os.path.dirname(__file__), 'train.pkl')  # Ruta predeterminada
+        self.Q = {}
+        self.load()
 
-		### Completar
+    def jugar(self):
+        estado = self.juego.reset()
+        jugando = True
+        while jugando:
+            if estado not in self.Q:
+                self.Q[estado] = [0, 0, 0]
 
-	# Juega al juego hasta que este termine, cada vez que mueve (en cada step) decide cual es la mejor accion segun el diccionario Q.
-	def jugar(self):
-		### Completar
-		pass
+            accion = self.get_max_action(self.Q[estado])
+            estado, jugando, recompensa = self.juego.step(accion)
 
-	# Juega el juego muchas veces y en cada vez completa la informacion de la tabla Q, en base al aprendizaje observado.,
-	def entrenar(self):
-		while True: # Esto es de prueba
-			jugando = True
-			estado_anterior = self.juego.reset()
-			while jugando:
-				action = random.randint(0, 2)
-				estado, jugando, recompensa = self.juego.step(action)
-				if estado not in self.Q:
-					self.Q[estado] = [0, 0, 0]
+    def entrenar(self):
+        partidas = 0
+        max_partidas = 450000  # Cambiar este valor a un número mayor para entrenar más partidas
 
-				best_action = self.get_max_action(self.Q[estado])
-				self.Q[estado_anterior][action] = self.Q[estado_anterior][action] + .05 * (recompensa - self.Q[estado_anterior][action] + self.Q[estado][best_action])
-				estado_anterior = estado
-			
+        while partidas < max_partidas:
+            jugando = True
+            estado_anterior = self.juego.reset()
 
-	def get_max_action(self, state):
-		max_value = max(state)
-		if state[0] == state[1] == state[2]:
-			return random.randint(0, 2)
-		elif state[0] == state[1] == max_value:
-			return random.choice([0, 1])
-		elif state[0] == state[2] == max_value:
-			return random.choice([0, 2])
-		elif state[1] == state[2] == max_value:
-			return random.choice([1, 2])
-			
-		return state.index(max_value)
-	
+            if estado_anterior not in self.Q:
+                self.Q[estado_anterior] = [0, 0, 0]
 
+            while jugando:
+                accion = self.get_max_action(self.Q[estado_anterior])
+                estado, jugando, recompensa = self.juego.step(accion)
 
+                if estado not in self.Q:
+                    self.Q[estado] = [0, 0, 0]
 
+                best_action = max(self.Q[estado])
+                self.Q[estado_anterior][accion] += 0.05 * (recompensa - self.Q[estado_anterior][accion] + best_action)
+                estado_anterior = estado
 
+            partidas += 1
+            print(partidas)
+        print("Entrenamiento completado")
+        self.save()  # Guardar el estado después del entrenamiento
 
+    def get_max_action(self, state):
+        max_value = max(state)
+        if state[0] == state[1] == state[2]:
+            return random.randint(0, 2)
+        elif state[0] == state[1] == max_value:
+            return random.choice([0, 1])
+        elif state[0] == state[2] == max_value:
+            return random.choice([0, 2])
+        elif state[1] == state[2] == max_value:
+            return random.choice([1, 2])
 
-	def set_path(self, path):
-		self.path = path
+        return state.index(max_value)
 
-	def save(self):
-		if self.path is not None:
-			with open(self.path, 'wb') as f:
-				pickle.dump(self.Q, f, protocol=pickle.HIGHEST_PROTOCOL)
+    def set_path(self, path):
+        self.path = path
 
-	def load(self):
-		if self.path is not None:
-			with open(self.path, 'rb') as f:
-				self.Q = pickle.load(f)
+    def save(self):
+        with open(self.path, 'wb') as f:
+            pickle.dump(self.Q, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def load(self):
+        if os.path.exists(self.path):
+            with open(self.path, 'rb') as f:
+                self.Q = pickle.load(f)
+        else:
+            print(f"No se encontró el archivo en {self.path}, iniciando con un Q vacío.")
