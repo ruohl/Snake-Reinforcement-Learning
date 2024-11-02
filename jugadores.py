@@ -40,7 +40,7 @@ class IA():
 
     def entrenar(self):
         partidas = 0
-        max_partidas = 450000  # Cambiar este valor a un número mayor para entrenar más partidas
+        max_partidas = 1000  # Cambiar este valor a un número mayor para entrenar más partidas
 
         while partidas < max_partidas:
             jugando = True

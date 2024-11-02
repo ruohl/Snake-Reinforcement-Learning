@@ -17,6 +17,8 @@ class Snake():
 		self.manzanasComidas = 0
 		self.maximoManzanas = maxManzanas
 		self.applePosition = None
+		self.apple_image = pygame.image.load("./assets/apple.png")
+		self.apple_image = pygame.transform.scale(self.apple_image, (50, 50))
 
 		### Completar
 		pygame.init()
@@ -69,7 +71,7 @@ class Snake():
 	# Recordatorio: un estado es una lista de 11 numeros bienarios (1 o 0), cada uno de estos bits indican si se cumple una condicion o no (estas 11 condiciones estan detalladas en el informe).
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
-		time.sleep(0.1)
+		time.sleep(0.001)
 		self.generarApple()
 		recompensa = None
 		if accion == 1:  # Turn left
@@ -115,9 +117,9 @@ class Snake():
 		self.grilla.renderGrid()
 
 		font = pygame.font.Font(None, 36)
-		puntaje = font.render(f"Comido: {self.manzanasComidas}", True, (230, 230, 230))
-		self.screen.blit(puntaje, (10, 10))
-
+		puntaje = font.render(f"{self.manzanasComidas}", True, (230, 230, 230))
+		self.screen.blit(self.apple_image, (90, 10))
+		self.screen.blit(puntaje, (70, 30))
 		pygame.display.flip()
 
 	## 
