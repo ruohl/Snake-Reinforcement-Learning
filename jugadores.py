@@ -40,7 +40,7 @@ class IA():
 
     def entrenar(self):
         partidas = 0
-        max_partidas = 450000  # Cambiar este valor a un número mayor para entrenar más partidas
+        max_partidas = 380000  # Cambiar este valor a un número mayor para entrenar más partidas
 
         while partidas < max_partidas:
             jugando = True
@@ -67,6 +67,8 @@ class IA():
 
     def get_max_action(self, state):
         max_value = max(state)
+        if random.randint(1,20) == 1:
+            return random.randint(0, 2)
         if state[0] == state[1] == state[2]:
             return random.randint(0, 2)
         elif state[0] == state[1] == max_value:
