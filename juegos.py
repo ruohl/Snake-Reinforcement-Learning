@@ -22,6 +22,9 @@ class Snake():
 		self.apple_image = pygame.image.load("./assets/apple.png")
 		self.apple_image = pygame.transform.scale(self.apple_image, (50, 50))
 
+		self.thropy_image = pygame.image.load("./assets/thropy.png")
+		self.thropy_image = pygame.transform.scale(self.thropy_image, (40, 40))
+
 		### Completar
 		pygame.init()
 		self.width, self.height = 800, 600
@@ -120,9 +123,15 @@ class Snake():
 		self.grilla.renderGrid()
 
 		font = pygame.font.Font(None, 36)
+
 		puntaje = font.render(f"{self.manzanasComidas}", True, (230, 230, 230))
 		self.screen.blit(self.apple_image, (90, 10))
 		self.screen.blit(puntaje, (70, 30))
+
+		maxScore = font.render(f"{self.totalScore}", True, (230, 230, 230))
+		self.screen.blit(self.thropy_image, (650, 20))
+		self.screen.blit(maxScore, (700, 30))
+
 		pygame.display.flip()
 
 	## 
