@@ -37,7 +37,9 @@ class Grilla:
 						pygame.draw.rect(self.screen, color, rect.inflate(0, 0))
 					elif self.grid[indX][indY] == 2:
 				        # Dibuja un círculo rojo para la manzana
-						pygame.draw.circle(self.screen, (255, 0, 0), rect.center, tile_size // 2)
+						self.apple_image = pygame.image.load("./assets/apple.png")
+						self.apple_image = pygame.transform.scale(self.apple_image, (30, 30))
+						self.screen.blit(self.apple_image, (x + offset_x, y + offset_y))
 
 					
 	
