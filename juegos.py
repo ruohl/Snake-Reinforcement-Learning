@@ -15,8 +15,10 @@ class Snake():
 		self.snake_length = 1
 		self.manzanas = 0
 		self.manzanasComidas = 0
+		self.totalScore = 0
 		self.maximoManzanas = maxManzanas
 		self.applePosition = None
+
 		self.apple_image = pygame.image.load("./assets/apple.png")
 		self.apple_image = pygame.transform.scale(self.apple_image, (50, 50))
 
@@ -91,6 +93,7 @@ class Snake():
 			recompensa = 1
 			self.manzanas -= 1
 			self.manzanasComidas += 1
+			self.totalScore += 1
 			self.snake.insert(0, new_head)  # Grow snake
 		else:
 			recompensa = 0
