@@ -68,8 +68,11 @@ class IA():
 
     def get_max_action(self, state):
         max_value = max(state)
-        if random.randint(1,20) == 1:
-            return random.randint(0, 2)
+        print("----------------------------")
+        print(state)
+        print("Max value: " + str(max_value))
+        print("----------------------------")
+        print("")
         if state[0] == state[1] == state[2]:
             return random.randint(0, 2)
         elif state[0] == state[1] == max_value:
