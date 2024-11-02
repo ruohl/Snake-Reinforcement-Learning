@@ -15,6 +15,7 @@ class Snake():
 		self.snake_length = 1
 		self.manzanas = 0
 		self.manzanasComidas = 0
+		self.bestScore = 0
 		self.totalScore = 0
 		self.maximoManzanas = maxManzanas
 		self.applePosition = None
@@ -64,6 +65,9 @@ class Snake():
 		self.sigueVivo = True
 		self.hayManzana = False
 		self.manzanas = 0
+		if self.totalScore > self.bestScore:
+			self.bestScore = self.totalScore
+		self.totalScore = 0
 		self.manzanasComidas = 0
 		self.initSnake()
 		return self.abstraccionGrilla()
@@ -76,7 +80,7 @@ class Snake():
 	# Recordatorio: un estado es una lista de 11 numeros bienarios (1 o 0), cada uno de estos bits indican si se cumple una condicion o no (estas 11 condiciones estan detalladas en el informe).
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
-		time.sleep(0.00001)
+		time.sleep(0.1)
 		self.generarApple()
 		recompensa = None
 		if accion == 1:  # Turn left
@@ -89,6 +93,8 @@ class Snake():
 		# Check for collision with walls or itself
 		if ((new_head[0] < 0) or (new_head[0] >= len(self.grilla.grid)) or (new_head[1] < 0) or (new_head[1] >= len(self.grilla.grid[0])) or (self.grilla.grid[new_head[0]][new_head[1]] == 1)):
 			self.sigueVivo = False
+			if self.totalScore > self.bestScore:
+				self.bestScore = self.totalScore
 			return self.abstraccionGrilla(), False, -1
 
 		# Check for apple
@@ -97,6 +103,8 @@ class Snake():
 			self.manzanas -= 1
 			self.manzanasComidas += 1
 			self.totalScore += 1
+			if self.totalScore > self.bestScore:
+				self.bestScore = self.totalScore
 			self.snake.insert(0, new_head)  # Grow snake
 		else:
 			recompensa = 0
@@ -128,7 +136,7 @@ class Snake():
 		self.screen.blit(self.apple_image, (90, 10))
 		self.screen.blit(puntaje, (70, 30))
 
-		maxScore = font.render(f"{self.totalScore}", True, (230, 230, 230))
+		maxScore = font.render(f"{self.bestScore}", True, (230, 230, 230))
 		self.screen.blit(self.thropy_image, (650, 20))
 		self.screen.blit(maxScore, (700, 30))
 
