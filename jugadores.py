@@ -40,7 +40,7 @@ class IA():
 
     def entrenar(self):
         partidas = 0
-        max_partidas = 1000 
+        max_partidas = 1
 
         while partidas < max_partidas:
             jugando = True
@@ -58,6 +58,7 @@ class IA():
 
                 best_action = max(self.Q[estado])
                 self.Q[estado_anterior][accion] += 0.05 * (recompensa - self.Q[estado_anterior][accion] + best_action)
+                print("resultado: " + str(0.05 * (recompensa - self.Q[estado_anterior][accion] + best_action)))
                 estado_anterior = estado
 
             partidas += 1

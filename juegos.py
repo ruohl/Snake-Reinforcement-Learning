@@ -11,7 +11,7 @@ class Snake():
 		self.corriendo = True
 		self.sigueVivo = True
 		self.tamanoCelda = tamanoCelda
-		self.direction = (0, -1)  # Oeste = (-1, 0), Este = (1, 0), Norte = (0, -1), Sur = (0, 1)
+		self.direction = (0, 1)  # Oeste = (-1, 0), Este = (1, 0), Norte = (0, -1), Sur = (0, 1)
 		self.snake_length = 1
 		self.manzanas = 0
 		self.manzanasComidas = 0
@@ -71,7 +71,7 @@ class Snake():
 	# Recordatorio: un estado es una lista de 11 numeros bienarios (1 o 0), cada uno de estos bits indican si se cumple una condicion o no (estas 11 condiciones estan detalladas en el informe).
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
-		time.sleep(0.00001)
+		time.sleep(0.3)
 		self.generarApple()
 		recompensa = None
 		if accion == 1:  # Turn left
@@ -125,8 +125,8 @@ class Snake():
 	## 
 	def abstraccionGrilla(self):
 		# Direcciones posibles de la serpiente
-		izquierda = (-self.direction[1], self.direction[0])  # Girar a la izquierda
-		derecha = (self.direction[1], -self.direction[0])   # Girar a la derecha
+		izquierda = (self.direction[1], -self.direction[0])  # Girar a la izquierda
+		derecha = (-self.direction[1], self.direction[0])   # Girar a la derecha
 
 		# Calculamos las posiciones posibles
 		adelante = (self.snake_head[0] + self.direction[0], self.snake_head[1] + self.direction[1])
