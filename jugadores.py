@@ -14,7 +14,6 @@ class Random():
             while jugando:
                 accion = random.randint(0, 2)
                 estado, jugando, recompensa = self.juego.step(accion)
-                print(f"Estado: {estado}, Recompensa: {recompensa}")
 
 
     def entrenar(self):
@@ -40,7 +39,7 @@ class IA():
 
     def entrenar(self):
         partidas = 0
-        max_partidas = 1
+        max_partidas = 200
 
         while partidas < max_partidas:
             jugando = True
@@ -58,7 +57,6 @@ class IA():
 
                 best_action = max(self.Q[estado])
                 self.Q[estado_anterior][accion] += 0.05 * (recompensa - self.Q[estado_anterior][accion] + best_action)
-                print("resultado: " + str(0.05 * (recompensa - self.Q[estado_anterior][accion] + best_action)))
                 estado_anterior = estado
 
             partidas += 1
@@ -68,8 +66,6 @@ class IA():
 
     def get_max_action(self, state):
         max_value = max(state)
-        if random.randint(1,20) == 1:
-            return random.randint(0, 2)
         if state[0] == state[1] == state[2]:
             return random.randint(0, 2)
         elif state[0] == state[1] == max_value:

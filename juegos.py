@@ -19,6 +19,7 @@ class Snake():
 		self.totalScore = 0
 		self.maximoManzanas = maxManzanas
 		self.applePosition = None
+		self.maximoSteps = 0
 
 		self.apple_image = pygame.image.load("./assets/apple.png")
 		self.apple_image = pygame.transform.scale(self.apple_image, (50, 50))
@@ -45,6 +46,7 @@ class Snake():
 		self.grilla.grid[randomX][randomY] = 1
 		self.snake_head = (randomX, randomY)
 		self.snake = [(randomX, randomY)]
+		self.maximoSteps = 0
 		
 
 	def generarApple(self):
@@ -80,7 +82,8 @@ class Snake():
 	# Recordatorio: un estado es una lista de 11 numeros bienarios (1 o 0), cada uno de estos bits indican si se cumple una condicion o no (estas 11 condiciones estan detalladas en el informe).
 	def step(self, accion):
 		assert accion in {0,1,2}, "Accion invalida"     # Chequea que la accion sea valida (0 = sigue derecho, 1 = dobla a la izquierda, 2 = dobla a la derecha)
-		time.sleep(0.3)
+		time.sleep(0.001)
+		self.maximoSteps += 1
 		self.generarApple()
 		recompensa = None
 		if accion == 1:  # Turn left
@@ -91,7 +94,7 @@ class Snake():
 		new_head = (self.snake[0][0] + self.direction[0], self.snake[0][1] + self.direction[1])
 		self.snake_head = new_head
 		# Check for collision with walls or itself
-		if ((new_head[0] < 0) or (new_head[0] >= len(self.grilla.grid)) or (new_head[1] < 0) or (new_head[1] >= len(self.grilla.grid[0])) or (self.grilla.grid[new_head[0]][new_head[1]] == 1)):
+		if (((new_head[0] < 0) or (new_head[0] >= len(self.grilla.grid)) or (new_head[1] < 0) or (new_head[1] >= len(self.grilla.grid[0])) or (self.grilla.grid[new_head[0]][new_head[1]] == 1)) or self.maximoSteps >= 200):
 			self.sigueVivo = False
 			if self.totalScore > self.bestScore:
 				self.bestScore = self.totalScore
@@ -166,9 +169,6 @@ class Snake():
 		adeMuere = 1 if colisiona(adelante) else 0
 		izqMuere = 1 if colisiona(izquierda_pos) else 0
 		derMuere = 1 if colisiona(derecha_pos) else 0
-		#print("-------------------------------------------------")
-		#print(self.direccion) # buenos print de testeo
-		#print(izqMuere, derMuere, adeMuere)
 
 		# Actualizamos las direcciones y posiciones de la manzana en relación a la serpiente
 		dirNorte = 1 if self.direction == (0, -1) else 0
