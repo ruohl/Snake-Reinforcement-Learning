@@ -15,10 +15,16 @@ class Snake():
 		self.snake_length = 1
 		self.manzanas = 0
 		self.manzanasComidas = 0
+		self.bestScore = 0
+		self.totalScore = 0
 		self.maximoManzanas = maxManzanas
 		self.applePosition = None
+
 		self.apple_image = pygame.image.load("./assets/apple.png")
 		self.apple_image = pygame.transform.scale(self.apple_image, (50, 50))
+
+		self.thropy_image = pygame.image.load("./assets/thropy.png")
+		self.thropy_image = pygame.transform.scale(self.thropy_image, (40, 40))
 
 		### Completar
 		pygame.init()
@@ -59,6 +65,9 @@ class Snake():
 		self.sigueVivo = True
 		self.hayManzana = False
 		self.manzanas = 0
+		if self.totalScore > self.bestScore:
+			self.bestScore = self.totalScore
+		self.totalScore = 0
 		self.manzanasComidas = 0
 		self.initSnake()
 		return self.abstraccionGrilla()
@@ -84,6 +93,8 @@ class Snake():
 		# Check for collision with walls or itself
 		if ((new_head[0] < 0) or (new_head[0] >= len(self.grilla.grid)) or (new_head[1] < 0) or (new_head[1] >= len(self.grilla.grid[0])) or (self.grilla.grid[new_head[0]][new_head[1]] == 1)):
 			self.sigueVivo = False
+			if self.totalScore > self.bestScore:
+				self.bestScore = self.totalScore
 			return self.abstraccionGrilla(), False, -1
 
 		# Check for apple
@@ -91,6 +102,9 @@ class Snake():
 			recompensa = 1
 			self.manzanas -= 1
 			self.manzanasComidas += 1
+			self.totalScore += 1
+			if self.totalScore > self.bestScore:
+				self.bestScore = self.totalScore
 			self.snake.insert(0, new_head)  # Grow snake
 		else:
 			recompensa = 0
@@ -117,9 +131,15 @@ class Snake():
 		self.grilla.renderGrid()
 
 		font = pygame.font.Font(None, 36)
+
 		puntaje = font.render(f"{self.manzanasComidas}", True, (230, 230, 230))
 		self.screen.blit(self.apple_image, (90, 10))
 		self.screen.blit(puntaje, (70, 30))
+
+		maxScore = font.render(f"{self.bestScore}", True, (230, 230, 230))
+		self.screen.blit(self.thropy_image, (650, 20))
+		self.screen.blit(maxScore, (700, 30))
+
 		pygame.display.flip()
 
 	## 
